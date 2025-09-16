@@ -41,8 +41,11 @@ fun LoginScreen(navController: NavController) {
             val user = UserDatabase.authenticateUser(email, password)
             if (user != null) {
                 Toast.makeText(context, "¡Bienvenido, ${user.fullName}!", Toast.LENGTH_SHORT).show()
-                // Aquí navegarías a la pantalla principal de la app
-                // navController.navigate("main_screen")
+                navController.navigate("main_screen") {
+                    popUpTo("login") {
+                        inclusive = true
+                    }
+                }
             } else {
                 Toast.makeText(context, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show()
             }

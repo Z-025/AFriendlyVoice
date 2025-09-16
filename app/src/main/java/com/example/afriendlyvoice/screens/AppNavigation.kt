@@ -1,6 +1,13 @@
 package com.example.afriendlyvoice.screens
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -16,10 +23,11 @@ fun AppNavigation() {
             RegisterScreen(navController)
         }
         composable("forgot_password") {
-            // Asumiendo que tienes un ForgotPasswordScreen.kt similar a los otros
             ForgotPasswordScreen(navController)
         }
-        // Aquí podrías agregar más destinos, como la pantalla principal post-login
-        // composable("main_screen") { MainScreen() }
+        composable("main_screen") {
+            MainScreen(navController)
+        }
+
     }
 }
