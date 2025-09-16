@@ -43,7 +43,6 @@ fun ForgotPasswordScreen(navController: NavController) {
 
         Button(
             onClick = {
-                // Lógica simulada de recuperación
                 Toast.makeText(context, "Se han enviado las instrucciones a $email", Toast.LENGTH_LONG).show()
                 navController.popBackStack()
             },

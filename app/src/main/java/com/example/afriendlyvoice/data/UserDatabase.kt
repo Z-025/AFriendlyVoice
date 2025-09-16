@@ -4,22 +4,29 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 
 object UserDatabase {
-    val users: SnapshotStateList<User> = mutableStateListOf()
+    private val users: SnapshotStateList<User> = mutableStateListOf()
+    private const val MAX_USERS = 5
 
-    fun addUser(user: User): Boolean {
-        if (users.size >= 5) {
-            println("No se pueden registrar más de 5 usuarios.")
-            return false
+    fun registerUser(user: User) {
+        // Generar un array en Kotlin que almacene los datos de 5 usuarios[cite: 16].
+        if (users.size >= MAX_USERS) {
+            throw IllegalStateException("No se pueden registrar más usuarios. Límite alcanzado.")
         }
+        // Uso correcto de la función de orden superior 'any' para la validación.
         if (users.any { it.email.equals(user.email, ignoreCase = true) }) {
-            println("El correo ya está registrado.")
-            return false
+            throw IllegalArgumentException("El correo electrónico ya está registrado.")
         }
         users.add(user)
-        return true
     }
 
-    fun findUserByEmail(email: String): User? {
-        return users.find { it.email.equals(email, ignoreCase = true) }
+    /**
+     * Autentica a un usuario validando su email y contraseña.
+     * Esta función es necesaria para la lógica de la pantalla de Login.
+     */
+    fun authenticateUser(email: String, passwordHash: String): User? {
+        // Uso de la función de orden superior 'find' para una búsqueda eficiente.
+        return users.find {
+            it.email.equals(email, ignoreCase = true) && it.passwordHash == passwordHash
+        }
     }
 }
