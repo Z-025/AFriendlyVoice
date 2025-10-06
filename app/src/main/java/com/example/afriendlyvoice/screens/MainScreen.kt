@@ -2,9 +2,10 @@ package com.example.afriendlyvoice.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -15,10 +16,13 @@ import androidx.navigation.NavController
 import com.example.afriendlyvoice.R
 import com.example.afriendlyvoice.auth.AuthViewModel
 import com.example.afriendlyvoice.utils.SoundPlayer
+import kotlinx.coroutines.launch
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavController, authViewModel: AuthViewModel = viewModel()) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -26,17 +30,19 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel = view
                 title = { Text("A Friendly Voice") },
                 actions = {
                     IconButton(onClick = {
-                        SoundPlayer.playSound(context, R.raw.success)
-                        authViewModel.logoutUser() // Llama a la función de logout del ViewModel
-                        navController.navigate("login") {
-                            popUpTo(0) { inclusive = true }
+                        scope.launch {
+                            SoundPlayer.playSound(context, R.raw.success)
+                            authViewModel.logoutUser(context)
+
+                            navController.navigate("login") {
+                                popUpTo(0) { inclusive = true }
+                            }
                         }
                     }) {
                         Icon(
-                            imageVector = Icons.Filled.Logout,
-                            contentDescription = "Cerrar Sesión" // Esencial para accesibilidad
+                            imageVector = Icons.AutoMirrored.Filled.Logout,
+                            contentDescription = "Cerrar Sesión"
                         )
-
                     }
                 }
             )
@@ -57,7 +63,6 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel = view
             )
             Spacer(modifier = Modifier.height(48.dp))
 
-            // Botón para la nueva función "Escribir"
             Button(
                 onClick = { navController.navigate("escribir_screen") },
                 modifier = Modifier.fillMaxWidth().height(50.dp)
@@ -66,7 +71,6 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel = view
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botón para la nueva función "Hablar"
             Button(
                 onClick = { /* navController.navigate("hablar_screen") */ },
                 modifier = Modifier.fillMaxWidth().height(50.dp)
@@ -75,7 +79,6 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel = view
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Botón para la nueva función "Buscar Dispositivo"
             Button(
                 onClick = { /* navController.navigate("buscar_dispositivo_screen") */ },
                 modifier = Modifier.fillMaxWidth().height(50.dp)
