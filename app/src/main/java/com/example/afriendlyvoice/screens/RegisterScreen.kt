@@ -11,20 +11,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.afriendlyvoice.R
-import com.example.afriendlyvoice.data.User
-import com.example.afriendlyvoice.data.UserDatabase
+import com.example.afriendlyvoice.auth.AuthViewModel
 import com.example.afriendlyvoice.utils.SoundPlayer
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(navController: NavController) {
+fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel = viewModel()) {
     var fullName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -68,31 +71,37 @@ fun RegisterScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(24.dp))
 
-            Button(onClick = {
-                if (password != confirmPassword) {
-                    SoundPlayer.playSound(context, R.raw.error)
-                    Toast.makeText(context, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
-                    return@Button
+            Button(
+                onClick = {
+                    if (password != confirmPassword) {
+                        SoundPlayer.playSound(context, R.raw.error)
+                        Toast.makeText(context, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+                    if (email.isNotBlank() && password.isNotBlank()) {
+                        isLoading = true
+                        scope.launch {
+                            val result = authViewModel.registerUser(email, password)
+                            isLoading = false
+                            if (result.isSuccess) {
+                                SoundPlayer.playSound(context, R.raw.success)
+                                Toast.makeText(context, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show()
+                                navController.popBackStack()
+                            } else {
+                                SoundPlayer.playSound(context, R.raw.error)
+                                val errorMsg = result.exceptionOrNull()?.message ?: "Error desconocido"
+                                Toast.makeText(context, "Error: $errorMsg", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                },
+                enabled = !isLoading
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                } else {
+                    Text("Registrar")
                 }
-
-                try {
-                    val newUser = User(fullName, email, password)
-                    UserDatabase.registerUser(newUser)
-                    SoundPlayer.playSound(context, R.raw.success)
-                    Toast.makeText(context, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show()
-                    navController.popBackStack() // Volver a Login
-                } catch (e: Exception) {
-                    SoundPlayer.playSound(context, R.raw.error)
-                    Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
-                }
-            }) {
-                Text("Registrar")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            TextButton(onClick = { navController.popBackStack() }) {
-                Text("Ya tengo una cuenta")
             }
         }
     }

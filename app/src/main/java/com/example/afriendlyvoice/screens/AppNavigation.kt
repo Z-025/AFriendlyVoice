@@ -1,21 +1,24 @@
 package com.example.afriendlyvoice.screens
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "login") {
+    val auth = FirebaseAuth.getInstance()
+    val startDestination = if (auth.currentUser != null) {
+        "main_screen"
+    } else {
+        "login"
+    }
+
+    // Usa la variable startDestination para definir la pantalla inicial del NavHost.
+    NavHost(navController = navController, startDestination = startDestination) {
+
         composable("login") {
             LoginScreen(navController)
         }
@@ -29,5 +32,14 @@ fun AppNavigation() {
             MainScreen(navController)
         }
 
+        composable("escribir_screen") {
+            EscribirScreen(navController)
+        }
+        composable("hablar_screen") {
+            HablarScreen(navController)
+        }
+        composable("buscar_dispositivo_screen") {
+            BuscarDispositivoScreen(navController)
+        }
     }
 }

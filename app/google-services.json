@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "345392426301",
+    "project_id": "a-friendly-voice",
+    "storage_bucket": "a-friendly-voice.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345392426301:android:c15d91ffbc44338760e954",
+        "android_client_info": {
+          "package_name": "com.example.afriendlyvoice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZkH2dNeg4u71ZZp1mGlbqxKhCJfvOcto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
