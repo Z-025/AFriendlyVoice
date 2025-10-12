@@ -79,4 +79,6 @@ dependencies {
     // ViewModel para Jetpack Compose - VERSIÓN CORREGIDA
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.compose.material:material-icons-extended:1.6.7")
+
+    implementation("com.google.android.gms:play-services-location:21.2.0")
 }

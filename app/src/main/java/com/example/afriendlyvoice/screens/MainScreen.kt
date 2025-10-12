@@ -1,5 +1,6 @@
 package com.example.afriendlyvoice.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
@@ -16,6 +17,7 @@ import androidx.navigation.NavController
 import com.example.afriendlyvoice.R
 import com.example.afriendlyvoice.auth.AuthViewModel
 import com.example.afriendlyvoice.utils.SoundPlayer
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -23,6 +25,7 @@ import kotlinx.coroutines.launch
 fun MainScreen(navController: NavController, authViewModel: AuthViewModel = viewModel()) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val currentUser = FirebaseAuth.getInstance().currentUser
 
     Scaffold(
         topBar = {
@@ -33,7 +36,6 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel = view
                         scope.launch {
                             SoundPlayer.playSound(context, R.raw.success)
                             authViewModel.logoutUser(context)
-
                             navController.navigate("login") {
                                 popUpTo(0) { inclusive = true }
                             }
@@ -56,6 +58,14 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel = view
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // 1. El saludo ahora está DENTRO de la Column
+            Text(
+                text = "Hola, ${currentUser?.email ?: "Usuario"}",
+                style = MaterialTheme.typography.titleLarge
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 2. El título del menú principal (solo una vez)
             Text(
                 "Menú Principal",
                 style = MaterialTheme.typography.headlineLarge,
@@ -72,7 +82,7 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel = view
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { /* navController.navigate("hablar_screen") */ },
+                onClick = { navController.navigate("hablar_screen") },
                 modifier = Modifier.fillMaxWidth().height(50.dp)
             ) {
                 Text("Hablar")
@@ -80,10 +90,18 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel = view
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { /* navController.navigate("buscar_dispositivo_screen") */ },
+                onClick = { navController.navigate("buscar_dispositivo_screen") },
                 modifier = Modifier.fillMaxWidth().height(50.dp)
             ) {
                 Text("Buscar Dispositivo")
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            TextButton(onClick = {
+                Toast.makeText(context, "Función de ayuda en desarrollo.", Toast.LENGTH_SHORT).show()
+            }) {
+                Text("Ayuda y Tutorial")
             }
         }
     }

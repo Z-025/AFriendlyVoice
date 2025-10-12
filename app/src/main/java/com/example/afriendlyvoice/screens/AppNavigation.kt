@@ -16,7 +16,6 @@ fun AppNavigation() {
         "login"
     }
 
-    // Usa la variable startDestination para definir la pantalla inicial del NavHost.
     NavHost(navController = navController, startDestination = startDestination) {
 
         composable("login") {
@@ -32,6 +31,15 @@ fun AppNavigation() {
             MainScreen(navController)
         }
 
+        composable("escribir_screen") {
+            EscribirScreen(navController)
+        }
+        composable("hablar_screen") {
+            HablarScreen(navController)
+        }
+        composable("buscar_dispositivo_screen") {
+            BuscarDispositivoScreen(navController)
+        }
         composable("escribir_screen") {
             EscribirScreen(navController)
         }

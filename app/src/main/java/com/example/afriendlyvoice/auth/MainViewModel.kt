@@ -28,4 +28,17 @@ class MainViewModel : ViewModel() {
             Result.failure(e)
         }
     }
+    suspend fun saveSpokenPhrase(text: String): Result<Boolean> {
+        val userId = auth.currentUser?.uid ?: return Result.failure(Exception("Usuario no autenticado"))
+        val phrase = hashMapOf(
+            "text" to text,
+            "timestamp" to System.currentTimeMillis()
+        )
+        return try {
+            db.collection("users").document(userId).collection("spoken_phrases").add(phrase).await()
+            Result.success(true)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
