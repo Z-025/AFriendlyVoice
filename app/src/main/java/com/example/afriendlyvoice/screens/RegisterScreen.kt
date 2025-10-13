@@ -1,5 +1,6 @@
 package com.example.afriendlyvoice.screens
 
+import com.example.afriendlyvoice.utils.showToast
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -75,7 +76,8 @@ fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel = 
                 onClick = {
                     if (password != confirmPassword) {
                         SoundPlayer.playSound(context, R.raw.error)
-                        Toast.makeText(context, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                        // 2. Llamada corregida
+                        context.showToast("Las contraseñas no coinciden")
                         return@Button
                     }
                     if (email.isNotBlank() && password.isNotBlank()) {
@@ -85,12 +87,14 @@ fun RegisterScreen(navController: NavController, authViewModel: AuthViewModel = 
                             isLoading = false
                             if (result.isSuccess) {
                                 SoundPlayer.playSound(context, R.raw.success)
-                                Toast.makeText(context, "Usuario registrado con éxito", Toast.LENGTH_SHORT).show()
+                                // 2. Llamada corregida
+                                context.showToast("Usuario registrado con éxito")
                                 navController.popBackStack()
                             } else {
                                 SoundPlayer.playSound(context, R.raw.error)
                                 val errorMsg = result.exceptionOrNull()?.message ?: "Error desconocido"
-                                Toast.makeText(context, "Error: $errorMsg", Toast.LENGTH_LONG).show()
+                                // 2. Llamada corregida (y con duración larga)
+                                context.showToast("Error: $errorMsg", Toast.LENGTH_LONG)
                             }
                         }
                     }

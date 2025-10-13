@@ -1,5 +1,6 @@
 package com.example.afriendlyvoice.screens
 
+import com.example.afriendlyvoice.utils.showToast
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -41,7 +42,7 @@ fun ForgotPasswordScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(horizontal = 32.dp), // Aplicamos padding horizontal
+                .padding(horizontal = 32.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -67,13 +68,16 @@ fun ForgotPasswordScreen(navController: NavController) {
 
             Button(
                 onClick = {
-                    SoundPlayer.playSound(context, R.raw.success)
-                    Toast.makeText(
-                        context,
-                        "Se han enviado las instrucciones a $email",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    navController.popBackStack()
+                    if (email.isNotBlank()) {
+                        SoundPlayer.playSound(context, R.raw.success)
+                        context.showToast(
+                            "Se han enviado las instrucciones a $email",
+                            Toast.LENGTH_LONG
+                        )
+                        navController.popBackStack()
+                    } else {
+                        context.showToast("Por favor, ingresa un correo electrónico.")
+                    }
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {

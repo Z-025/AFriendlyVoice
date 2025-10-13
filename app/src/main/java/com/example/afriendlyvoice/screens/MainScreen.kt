@@ -1,5 +1,8 @@
 package com.example.afriendlyvoice.screens
 
+// Asegúrate de que este import esté presente
+import com.example.afriendlyvoice.utils.showToast
+// ... otros imports
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -58,14 +61,12 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel = view
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // 1. El saludo ahora está DENTRO de la Column
             Text(
                 text = "Hola, ${currentUser?.email ?: "Usuario"}",
                 style = MaterialTheme.typography.titleLarge
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 2. El título del menú principal (solo una vez)
             Text(
                 "Menú Principal",
                 style = MaterialTheme.typography.headlineLarge,
@@ -99,7 +100,7 @@ fun MainScreen(navController: NavController, authViewModel: AuthViewModel = view
             Spacer(modifier = Modifier.height(32.dp))
 
             TextButton(onClick = {
-                Toast.makeText(context, "Función de ayuda en desarrollo.", Toast.LENGTH_SHORT).show()
+                context.showToast("Función de ayuda en desarrollo.")
             }) {
                 Text("Ayuda y Tutorial")
             }

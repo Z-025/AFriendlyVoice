@@ -1,9 +1,10 @@
 package com.example.afriendlyvoice.screens
 
-import android.widget.Toast
+import com.example.afriendlyvoice.utils.showToast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+// --- CORRECCIÓN: Se usa el ícono AutoMirrored ---
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -41,7 +42,8 @@ fun HablarScreen(navController: NavController, mainViewModel: MainViewModel = vi
                 title = { Text("Función Hablar") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Volver atrás")
+                        // --- CORRECCIÓN: Se usa el ícono AutoMirrored ---
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver atrás")
                     }
                 }
             )
@@ -63,7 +65,7 @@ fun HablarScreen(navController: NavController, mainViewModel: MainViewModel = vi
                             mainViewModel.saveSpokenPhrase(textToSpeak)
                         }
                     } else {
-                        Toast.makeText(context, "El texto no puede estar vacío.", Toast.LENGTH_SHORT).show()
+                        context.showToast("El texto no puede estar vacío.")
                     }
                 },
                 enabled = isTtsInitialized

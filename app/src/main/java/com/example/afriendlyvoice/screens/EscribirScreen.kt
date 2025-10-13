@@ -1,5 +1,6 @@
 package com.example.afriendlyvoice.screens
 
+import com.example.afriendlyvoice.utils.showToast
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -16,7 +17,6 @@ import com.example.afriendlyvoice.R
 import com.example.afriendlyvoice.auth.MainViewModel
 import com.example.afriendlyvoice.utils.SoundPlayer
 import kotlinx.coroutines.launch
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,13 +63,15 @@ fun EscribirScreen(navController: NavController, mainViewModel: MainViewModel = 
                             isLoading = false
                             if (result.isSuccess) {
                                 SoundPlayer.playSound(context, R.raw.success)
-                                Toast.makeText(context, "Nota guardada con éxito", Toast.LENGTH_SHORT).show()
+                                context.showToast("Nota guardada con éxito")
                                 navController.popBackStack() // Volver al menú
                             } else {
                                 SoundPlayer.playSound(context, R.raw.error)
-                                Toast.makeText(context, "Error al guardar la nota", Toast.LENGTH_SHORT).show()
+                                context.showToast("Error al guardar la nota", Toast.LENGTH_LONG)
                             }
                         }
+                    } else {
+                        context.showToast("El campo de texto no puede estar vacío.")
                     }
                 },
                 enabled = !isLoading,

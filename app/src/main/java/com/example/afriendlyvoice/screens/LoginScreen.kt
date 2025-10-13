@@ -1,5 +1,7 @@
 package com.example.afriendlyvoice.screens
 
+// 1. Asegúrate de que este import para tu extensión esté presente
+import com.example.afriendlyvoice.utils.showToast
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -60,14 +62,16 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel = vie
                         isLoading = false
                         if (result.isSuccess) {
                             SoundPlayer.playSound(context, R.raw.success)
-                            Toast.makeText(context, "¡Bienvenido!", Toast.LENGTH_SHORT).show()
+                            // 2. LLAMADA CORREGIDA
+                            context.showToast("¡Bienvenido!")
                             navController.navigate("main_screen") {
                                 popUpTo("login") { inclusive = true }
                             }
                         } else {
                             SoundPlayer.playSound(context, R.raw.error)
                             val errorMsg = result.exceptionOrNull()?.message ?: "Correo o contraseña incorrectos"
-                            Toast.makeText(context, "Error: $errorMsg", Toast.LENGTH_SHORT).show()
+                            // 2. LLAMADA CORREGIDA (con duración larga)
+                            context.showToast("Error: $errorMsg", Toast.LENGTH_LONG)
                         }
                     }
                 }
